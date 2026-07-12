@@ -7,6 +7,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Fraunces:opsz,wght@9..144,500;9..144,700&display=swap" rel="stylesheet">
 <style>
+  @font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic/compiled/OpenDyslexic-Regular.otf') format('opentype');
+    font-weight: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'OpenDyslexic';
+    src: url('https://cdn.jsdelivr.net/gh/antijingoist/opendyslexic/compiled/OpenDyslexic-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-display: swap;
+  }
   :root {
     --bg: #EAEDE7;
     --panel: #FBF8F0;
@@ -22,14 +34,35 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
+    background:
+      radial-gradient(circle at 1px 1px, rgba(63,108,81,0.08) 1px, transparent 0) 0 0/22px 22px,
+      var(--bg);
     color: var(--ink);
     font-family: 'Atkinson Hyperlegible', Verdana, Arial, sans-serif;
     line-height: 1.5;
   }
-  .wrap { max-width: 920px; margin: 0 auto; padding: 32px 20px 80px; }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 80px; }
  
-  header { margin-bottom: 40px; }
+  .panel {
+    box-shadow: 0 1px 2px rgba(34,48,40,0.04), 0 8px 24px rgba(34,48,40,0.05);
+  }
+ 
+  header {
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 24px;
+    align-items: center;
+  }
+  @media (max-width: 720px) { header { grid-template-columns: 1fr; } .hero-art { display: none; } }
+  .hero-art {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: 0 1px 2px rgba(34,48,40,0.04), 0 8px 24px rgba(34,48,40,0.05);
+  }
+  .hero-art svg { width: 100%; height: auto; display: block; }
   .eyebrow {
     font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--accent); font-weight: 700; margin-bottom: 10px;
@@ -79,6 +112,29 @@
   }
   .output-box.empty { color: var(--ink-soft); font-style: italic; }
  
+  .font-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
+  .font-btn {
+    padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border);
+    background: #fff; color: var(--ink); font-size: 14px; cursor: pointer;
+    font-family: inherit; transition: background 0.12s ease, border-color 0.12s ease;
+  }
+  .font-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 700; }
+ 
+  .icon-btn {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    padding: 4px 10px; font-size: 13px; cursor: pointer; color: var(--ink-soft);
+    font-family: inherit;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .icon-btn.speaking { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+ 
+  .reading-ruler {
+    position: absolute; left: 0; right: 0; height: 34px;
+    pointer-events: none;
+    box-shadow: 0 -1000px 0 999px rgba(234,237,231,0.88), 0 1000px 0 999px rgba(234,237,231,0.88);
+    border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
+  }
+ 
   .ruler-tag {
     font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
   }
@@ -89,9 +145,12 @@
     background: var(--accent); color: #fff; border: none;
     padding: 12px 22px; border-radius: 10px; font-size: 16px; font-weight: 700;
     font-family: inherit; cursor: pointer; margin-top: 14px;
+    transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+    box-shadow: 0 2px 8px rgba(63,108,81,0.25);
   }
-  button.primary:hover { background: #345A43; }
-  button.primary:disabled { opacity: 0.6; cursor: default; }
+  button.primary:hover { background: #345A43; box-shadow: 0 4px 12px rgba(63,108,81,0.3); }
+  button.primary:active { }
+  button.primary:disabled { opacity: 0.6; cursor: default; box-shadow: none; }
  
   .settings {
     margin-top: 28px;
@@ -112,15 +171,37 @@
   .swatch {
     width: 32px; height: 32px; border-radius: 8px; cursor: pointer;
     border: 2px solid transparent;
+    transition: transform 0.12s ease, border-color 0.12s ease;
   }
+  .swatch:hover { transform: scale(1.08); }
   .swatch.active { border-color: var(--accent); }
  
   .science {
     margin-top: 40px;
   }
-  .science ul { padding-left: 20px; }
-  .science li { margin-bottom: 10px; color: var(--ink-soft); }
-  .science li b { color: var(--ink); }
+  .science-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+  .science-card {
+    background: var(--panel-alt);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    transition: box-shadow 0.15s ease;
+  }
+  .science-card:hover {
+    box-shadow: 0 4px 12px rgba(34,48,40,0.08);
+  }
+  .science-card .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent);
+    font-size: 13px; font-weight: 700; margin-bottom: 10px;
+  }
+  .science-card b { display: block; color: var(--ink); margin-bottom: 4px; }
+  .science-card span { color: var(--ink-soft); font-size: 14px; }
  
   .footer-note {
     margin-top: 40px; font-size: 13px; color: var(--ink-soft);
@@ -136,9 +217,46 @@
 <div class="wrap">
  
   <header>
-    <div class="eyebrow">ClearRead · прототип</div>
-    <h1>Текст, который легче читать.</h1>
-    <p class="sub">Вставь любой сложный текст — учебник, статью, инструкцию. ClearRead упростит формулировки и переформатирует страницу по правилам, которые реально помогают читателям с дислексией.</p>
+    <div>
+      <div class="eyebrow">ClearRead · прототип</div>
+      <h1>Текст, который легче читать.</h1>
+      <p class="sub">Вставь любой сложный текст — учебник, статью, инструкцию. ClearRead упростит формулировки и переформатирует страницу по правилам, которые реально помогают читателям с дислексией.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+        <!-- cramped paragraph, left half -->
+        <g class="cramped-line" fill="#B7BEB2">
+          <rect x="10" y="18" width="110" height="5"></rect>
+          <rect x="10" y="27" width="120" height="5"></rect>
+          <rect x="10" y="36" width="95" height="5"></rect>
+          <rect x="10" y="45" width="115" height="5"></rect>
+          <rect x="10" y="54" width="80" height="5"></rect>
+          <rect x="10" y="63" width="118" height="5"></rect>
+          <rect x="10" y="72" width="100" height="5"></rect>
+          <rect x="10" y="81" width="110" height="5"></rect>
+          <rect x="10" y="90" width="70" height="5"></rect>
+        </g>
+        <!-- arrow -->
+        <path d="M138 100 L160 100" stroke="#3F6C51" stroke-width="3" stroke-linecap="round"></path>
+        <path d="M153 93 L161 100 L153 107" stroke="#3F6C51" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+        <!-- clear paragraph, right half -->
+        <g class="clear-line" fill="#3F6C51">
+          <rect x="176" y="20" width="90" height="7" rx="2"></rect>
+        </g>
+        <g class="clear-line" fill="#3F6C51">
+          <rect x="176" y="45" width="75" height="7" rx="2"></rect>
+        </g>
+        <g class="clear-line" fill="#3F6C51">
+          <rect x="176" y="70" width="85" height="7" rx="2"></rect>
+        </g>
+        <g class="clear-line" fill="#3F6C51">
+          <rect x="176" y="95" width="60" height="7" rx="2"></rect>
+        </g>
+        <text x="176" y="140" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">короче.</text>
+        <text x="176" y="160" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">просторнее.</text>
+        <text x="176" y="180" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">понятнее.</text>
+      </svg>
+    </div>
   </header>
  
   <section class="panel">
@@ -150,9 +268,15 @@
       <div>
         <div class="col-label">
           <span>Упрощённая версия</span>
-          <span id="rulerTag" class="ruler-tag ruler-ok" style="display:none;"></span>
+          <span style="display:flex; gap:8px; align-items:center;">
+            <button type="button" id="listenBtn" class="icon-btn" title="Слушать текст" style="display:none;">🔊 Слушать</button>
+            <span id="rulerTag" class="ruler-tag ruler-ok" style="display:none;"></span>
+          </span>
         </div>
-        <div id="outputBox" class="output-box empty">Здесь появится упрощённый и переформатированный текст.</div>
+        <div id="outputWrap" style="position:relative;">
+          <div id="outputBox" class="output-box empty">Здесь появится упрощённый и переформатированный текст.</div>
+          <div id="readingRuler" class="reading-ruler" style="display:none;"></div>
+        </div>
       </div>
     </div>
     <button class="primary" id="simplifyBtn">Упростить текст</button>
@@ -175,6 +299,19 @@
         <input type="range" id="letterSpacing" min="0" max="0.15" step="0.01" value="0.02">
       </div>
       <div class="control">
+        <label>Шрифт текста</label>
+        <div class="font-toggle">
+          <button type="button" class="font-btn active" data-font="'Atkinson Hyperlegible', Verdana, sans-serif">Обычный</button>
+          <button type="button" class="font-btn" data-font="'OpenDyslexic', 'Atkinson Hyperlegible', sans-serif">OpenDyslexic</button>
+        </div>
+      </div>
+      <div class="control">
+        <label>Линейка для чтения</label>
+        <div class="font-toggle">
+          <button type="button" id="rulerToggle" class="font-btn">Включить</button>
+        </div>
+      </div>
+      <div class="control">
         <label>Фон текста</label>
         <div class="swatches">
           <div class="swatch active" style="background:#FBF8F0" data-color="#FBF8F0"></div>
@@ -188,13 +325,33 @@
  
   <section class="science panel">
     <h2>На чём основан дизайн</h2>
-    <ul>
-      <li><b>Интервалы важнее шрифта.</b> Специальные «дислексик-шрифты» не показали устойчивого преимущества перед обычным чистым sans-serif — разница в межбуквенном и межстрочном интервале работает надёжнее.</li>
-      <li><b>Длина строки.</b> Рекомендуемая длина строки — 60–70 символов, текст выровнен по левому краю без выравнивания по ширине.</li>
-      <li><b>Межстрочный интервал 1.5–2×</b> снижает визуальную скученность текста.</li>
-      <li><b>Не белый фон.</b> Тёплый неяркий оттенок вместо чистого белого снижает контрастную усталость при чтении.</li>
-      <li><b>Размер шрифта имеет значение сам по себе</b> — увеличенный кегль ускоряет чтение независимо от гарнитуры.</li>
-    </ul>
+    <div class="science-grid">
+      <div class="science-card">
+        <span class="num">1</span>
+        <b>Интервалы важнее шрифта</b>
+        <span>Специальные «дислексик-шрифты» не показали устойчивого преимущества перед обычным чистым sans-serif — разница в межбуквенном и межстрочном интервале работает надёжнее.</span>
+      </div>
+      <div class="science-card">
+        <span class="num">2</span>
+        <b>Длина строки</b>
+        <span>Рекомендуемая длина строки — 60–70 символов, текст выровнен по левому краю без выравнивания по ширине.</span>
+      </div>
+      <div class="science-card">
+        <span class="num">3</span>
+        <b>Межстрочный интервал 1.5–2×</b>
+        <span>Снижает визуальную скученность текста и помогает глазу не «терять» строку при чтении.</span>
+      </div>
+      <div class="science-card">
+        <span class="num">4</span>
+        <b>Не белый фон</b>
+        <span>Тёплый неяркий оттенок вместо чистого белого снижает контрастную усталость при чтении.</span>
+      </div>
+      <div class="science-card">
+        <span class="num">5</span>
+        <b>Размер шрифта имеет значение сам по себе</b>
+        <span>Увеличенный кегль ускоряет чтение независимо от гарнитуры.</span>
+      </div>
+    </div>
   </section>
  
   <div class="footer-note">
@@ -219,13 +376,67 @@
   const swatches = document.querySelectorAll('.swatch');
  
   let currentBg = '#FBF8F0';
+  let currentFont = "'Atkinson Hyperlegible', Verdana, sans-serif";
+ 
+  const fontBtns = document.querySelectorAll('.font-btn[data-font]');
+  fontBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      fontBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFont = btn.dataset.font;
+      applyStyles();
+    });
+  });
+ 
+  // Reading ruler: highlights the line under the cursor, dims the rest
+  const outputWrap = document.getElementById('outputWrap');
+  const readingRuler = document.getElementById('readingRuler');
+  const rulerToggle = document.getElementById('rulerToggle');
+  let rulerOn = false;
+ 
+  rulerToggle.addEventListener('click', () => {
+    rulerOn = !rulerOn;
+    rulerToggle.textContent = rulerOn ? 'Выключить' : 'Включить';
+    rulerToggle.classList.toggle('active', rulerOn);
+    readingRuler.style.display = rulerOn ? 'block' : 'none';
+  });
+ 
+  outputWrap.addEventListener('mousemove', (e) => {
+    if (!rulerOn) return;
+    const rect = outputWrap.getBoundingClientRect();
+    const y = e.clientY - rect.top;
+    readingRuler.style.top = Math.max(0, y - 17) + 'px';
+  });
+ 
+  // Text-to-speech ("Слушать текст")
+  const listenBtn = document.getElementById('listenBtn');
+  listenBtn.addEventListener('click', () => {
+    if (!('speechSynthesis' in window)) return;
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+      listenBtn.classList.remove('speaking');
+      listenBtn.textContent = '🔊 Слушать';
+      return;
+    }
+    const text = outputBox.textContent;
+    if (!text) return;
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'ru-RU';
+    utter.rate = 0.95;
+    utter.onend = () => { listenBtn.classList.remove('speaking'); listenBtn.textContent = '🔊 Слушать'; };
+    listenBtn.classList.add('speaking');
+    listenBtn.textContent = '⏸ Стоп';
+    speechSynthesis.speak(utter);
+  });
  
   function applyStyles() {
     outputBox.style.fontSize = fontSize.value + 'px';
     outputBox.style.lineHeight = lineHeight.value;
     outputBox.style.letterSpacing = letterSpacing.value + 'em';
     outputBox.style.background = currentBg;
+    outputBox.style.fontFamily = currentFont;
     outputBox.style.maxWidth = '65ch';
+    outputBox.style.textAlign = 'left';
  
     fontSizeVal.textContent = fontSize.value + 'px';
     lineHeightVal.textContent = lineHeight.value;
@@ -282,6 +493,7 @@
       }
       outputBox.textContent = data.simplified || 'Не удалось получить ответ.';
       applyStyles();
+      if (data.simplified) listenBtn.style.display = 'inline-block';
     } catch (err) {
       console.error(err);
       errorMsg.textContent = 'Ошибка при упрощении текста. Попробуй ещё раз.';
