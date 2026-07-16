@@ -42,11 +42,21 @@
     line-height: 1.5;
   }
   .wrap { max-width: 960px; margin: 0 auto; padding: 32px 20px 80px; }
- 
+
   .panel {
     box-shadow: 0 1px 2px rgba(34,48,40,0.04), 0 8px 24px rgba(34,48,40,0.05);
   }
- 
+
+  .lang-toggle {
+    display: flex; justify-content: flex-end; gap: 6px; margin-bottom: 16px;
+  }
+  .lang-btn {
+    padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border);
+    background: #fff; color: var(--ink-soft); font-size: 13px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+  }
+  .lang-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
   header {
     margin-bottom: 40px;
     display: grid;
@@ -76,14 +86,14 @@
     color: var(--ink);
   }
   .sub { font-size: 17px; color: var(--ink-soft); max-width: 60ch; }
- 
+
   .panel {
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 22px;
   }
- 
+
   .demo-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -91,27 +101,27 @@
     margin-top: 8px;
   }
   @media (max-width: 720px) { .demo-grid { grid-template-columns: 1fr; } }
- 
+
   .col-label {
     font-size: 13px; font-weight: 700; color: var(--ink-soft);
     text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
     display: flex; justify-content: space-between; align-items: center;
   }
- 
+
   textarea {
     width: 100%; min-height: 220px; resize: vertical;
     font-family: 'Atkinson Hyperlegible', Verdana, sans-serif;
     font-size: 16px; padding: 14px; border-radius: 10px;
     border: 1px solid var(--border); background: #fff; color: var(--ink);
   }
- 
+
   .output-box {
     min-height: 220px; padding: 14px; border-radius: 10px;
     background: var(--panel-alt); border: 1px solid var(--border);
     white-space: pre-wrap; overflow-wrap: break-word;
   }
   .output-box.empty { color: var(--ink-soft); font-style: italic; }
- 
+
   .font-toggle { display: flex; gap: 8px; flex-wrap: wrap; }
   .font-btn {
     padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border);
@@ -119,7 +129,7 @@
     font-family: inherit; transition: background 0.12s ease, border-color 0.12s ease;
   }
   .font-btn.active { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 700; }
- 
+
   .icon-btn {
     background: none; border: 1px solid var(--border); border-radius: 8px;
     padding: 4px 10px; font-size: 13px; cursor: pointer; color: var(--ink-soft);
@@ -127,20 +137,20 @@
   }
   .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
   .icon-btn.speaking { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
- 
+
   .reading-ruler {
     position: absolute; left: 0; right: 0; height: 34px;
     pointer-events: none;
     box-shadow: 0 -1000px 0 999px rgba(234,237,231,0.88), 0 1000px 0 999px rgba(234,237,231,0.88);
     border-top: 1px solid var(--accent); border-bottom: 1px solid var(--accent);
   }
- 
+
   .ruler-tag {
     font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
   }
   .ruler-ok { background: var(--accent-soft); color: var(--accent); }
   .ruler-warn { background: #F3E5D0; color: var(--gold); }
- 
+
   button.primary {
     background: var(--accent); color: #fff; border: none;
     padding: 12px 22px; border-radius: 10px; font-size: 16px; font-weight: 700;
@@ -151,7 +161,7 @@
   button.primary:hover { background: #345A43; box-shadow: 0 4px 12px rgba(63,108,81,0.3); }
   button.primary:active { }
   button.primary:disabled { opacity: 0.6; cursor: default; box-shadow: none; }
- 
+
   .settings {
     margin-top: 28px;
   }
@@ -175,7 +185,7 @@
   }
   .swatch:hover { transform: scale(1.08); }
   .swatch.active { border-color: var(--accent); }
- 
+
   .science {
     margin-top: 40px;
   }
@@ -202,12 +212,12 @@
   }
   .science-card b { display: block; color: var(--ink); margin-bottom: 4px; }
   .science-card span { color: var(--ink-soft); font-size: 14px; }
- 
+
   .footer-note {
     margin-top: 40px; font-size: 13px; color: var(--ink-soft);
     border-top: 1px solid var(--border); padding-top: 16px;
   }
- 
+
   .error-msg {
     margin-top: 10px; color: #9A3B3B; font-size: 14px;
   }
@@ -215,12 +225,17 @@
 </head>
 <body>
 <div class="wrap">
- 
+
+  <div class="lang-toggle" role="group" aria-label="Language">
+    <button type="button" class="lang-btn active" data-lang="ru">RU</button>
+    <button type="button" class="lang-btn" data-lang="en">EN</button>
+  </div>
+
   <header>
     <div>
-      <div class="eyebrow">ClearRead · прототип</div>
-      <h1>Текст, который легче читать.</h1>
-      <p class="sub">Вставь любой сложный текст — учебник, статью, инструкцию. ClearRead упростит формулировки и переформатирует страницу по правилам, которые реально помогают читателям с дислексией.</p>
+      <div class="eyebrow" data-i18n="eyebrow">ClearRead · прототип</div>
+      <h1 data-i18n="h1">Текст, который легче читать.</h1>
+      <p class="sub" data-i18n="sub">Вставь любой сложный текст — учебник, статью, инструкцию. ClearRead упростит формулировки и переформатирует страницу по правилам, которые реально помогают читателям с дислексией.</p>
     </div>
     <div class="hero-art" aria-hidden="true">
       <svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
@@ -252,67 +267,67 @@
         <g class="clear-line" fill="#3F6C51">
           <rect x="176" y="95" width="60" height="7" rx="2"></rect>
         </g>
-        <text x="176" y="140" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">короче.</text>
-        <text x="176" y="160" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">просторнее.</text>
-        <text x="176" y="180" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">понятнее.</text>
+        <text id="heroWord1" x="176" y="140" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">короче.</text>
+        <text id="heroWord2" x="176" y="160" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">просторнее.</text>
+        <text id="heroWord3" x="176" y="180" font-family="'Fraunces', serif" font-size="15" fill="#22302899" font-weight="600">понятнее.</text>
       </svg>
     </div>
   </header>
- 
+
   <section class="panel">
     <div class="demo-grid">
       <div>
-        <div class="col-label">Исходный текст</div>
-        <textarea id="inputText" placeholder="Вставь текст сюда...">Согласно последним исследованиям, эффективность специализированных типографических решений, направленных на компенсацию дислексических нарушений чтения, остаётся предметом научной дискуссии среди специалистов в области когнитивной психологии и педагогики.</textarea>
+        <div class="col-label"><span data-i18n="sourceLabel">Исходный текст</span></div>
+        <textarea id="inputText" data-i18n-placeholder="placeholder" placeholder="Вставь текст сюда...">Согласно последним исследованиям, эффективность специализированных типографических решений, направленных на компенсацию дислексических нарушений чтения, остаётся предметом научной дискуссии среди специалистов в области когнитивной психологии и педагогики.</textarea>
       </div>
       <div>
         <div class="col-label">
-          <span>Упрощённая версия</span>
+          <span data-i18n="simplifiedLabel">Упрощённая версия</span>
           <span style="display:flex; gap:8px; align-items:center;">
-            <button type="button" id="listenBtn" class="icon-btn" title="Слушать текст" style="display:none;">🔊 Слушать</button>
+            <button type="button" id="listenBtn" class="icon-btn" title="Слушать текст" style="display:none;">🔊 <span data-i18n="listen">Слушать</span></button>
             <span id="rulerTag" class="ruler-tag ruler-ok" style="display:none;"></span>
           </span>
         </div>
         <div id="outputWrap" style="position:relative;">
-          <div id="outputBox" class="output-box empty">Здесь появится упрощённый и переформатированный текст.</div>
+          <div id="outputBox" class="output-box empty" data-i18n="outputEmpty">Здесь появится упрощённый и переформатированный текст.</div>
           <div id="readingRuler" class="reading-ruler" style="display:none;"></div>
         </div>
       </div>
     </div>
-    <button class="primary" id="simplifyBtn">Упростить текст</button>
+    <button class="primary" id="simplifyBtn" data-i18n="simplifyBtn">Упростить текст</button>
     <div id="errorMsg" class="error-msg" style="display:none;"></div>
   </section>
- 
+
   <section class="settings panel">
-    <h2>Настройки чтения</h2>
+    <h2 data-i18n="settingsTitle">Настройки чтения</h2>
     <div class="controls-grid">
       <div class="control">
-        <label>Размер шрифта <span class="value" id="fontSizeVal">18px</span></label>
+        <label><span data-i18n="fontSizeLabel">Размер шрифта</span> <span class="value" id="fontSizeVal">18px</span></label>
         <input type="range" id="fontSize" min="16" max="28" value="18">
       </div>
       <div class="control">
-        <label>Межстрочный интервал <span class="value" id="lineHeightVal">1.6</span></label>
+        <label><span data-i18n="lineHeightLabel">Межстрочный интервал</span> <span class="value" id="lineHeightVal">1.6</span></label>
         <input type="range" id="lineHeight" min="1.2" max="2.2" step="0.1" value="1.6">
       </div>
       <div class="control">
-        <label>Межбуквенный интервал <span class="value" id="letterSpacingVal">0.02em</span></label>
+        <label><span data-i18n="letterSpacingLabel">Межбуквенный интервал</span> <span class="value" id="letterSpacingVal">0.02em</span></label>
         <input type="range" id="letterSpacing" min="0" max="0.15" step="0.01" value="0.02">
       </div>
       <div class="control">
-        <label>Шрифт текста</label>
+        <label data-i18n="fontFamilyLabel">Шрифт текста</label>
         <div class="font-toggle">
-          <button type="button" class="font-btn active" data-font="'Atkinson Hyperlegible', Verdana, sans-serif">Обычный</button>
+          <button type="button" class="font-btn active" data-font="'Atkinson Hyperlegible', Verdana, sans-serif" data-i18n="fontStandard">Обычный</button>
           <button type="button" class="font-btn" data-font="'OpenDyslexic', 'Atkinson Hyperlegible', sans-serif">OpenDyslexic</button>
         </div>
       </div>
       <div class="control">
-        <label>Линейка для чтения</label>
+        <label data-i18n="rulerLabel">Линейка для чтения</label>
         <div class="font-toggle">
-          <button type="button" id="rulerToggle" class="font-btn">Включить</button>
+          <button type="button" id="rulerToggle" class="font-btn" data-i18n="rulerOn">Включить</button>
         </div>
       </div>
       <div class="control">
-        <label>Фон текста</label>
+        <label data-i18n="bgLabel">Фон текста</label>
         <div class="swatches">
           <div class="swatch active" style="background:#FBF8F0" data-color="#FBF8F0"></div>
           <div class="swatch" style="background:#FDF6E3" data-color="#FDF6E3"></div>
@@ -322,51 +337,173 @@
       </div>
     </div>
   </section>
- 
+
   <section class="science panel">
-    <h2>На чём основан дизайн</h2>
+    <h2 data-i18n="scienceTitle">На чём основан дизайн</h2>
     <div class="science-grid">
       <div class="science-card">
         <span class="num">1</span>
-        <b>Интервалы важнее шрифта</b>
-        <span>Специальные «дислексик-шрифты» не показали устойчивого преимущества перед обычным чистым sans-serif — разница в межбуквенном и межстрочном интервале работает надёжнее.</span>
+        <b data-i18n="sci1t">Интервалы важнее шрифта</b>
+        <span data-i18n="sci1b">Специальные «дислексик-шрифты» не показали устойчивого преимущества перед обычным чистым sans-serif — разница в межбуквенном и межстрочном интервале работает надёжнее.</span>
       </div>
       <div class="science-card">
         <span class="num">2</span>
-        <b>Длина строки</b>
-        <span>Рекомендуемая длина строки — 60–70 символов, текст выровнен по левому краю без выравнивания по ширине.</span>
+        <b data-i18n="sci2t">Длина строки</b>
+        <span data-i18n="sci2b">Рекомендуемая длина строки — 60–70 символов, текст выровнен по левому краю без выравнивания по ширине.</span>
       </div>
       <div class="science-card">
         <span class="num">3</span>
-        <b>Межстрочный интервал 1.5–2×</b>
-        <span>Снижает визуальную скученность текста и помогает глазу не «терять» строку при чтении.</span>
+        <b data-i18n="sci3t">Межстрочный интервал 1.5–2×</b>
+        <span data-i18n="sci3b">Снижает визуальную скученность текста и помогает глазу не «терять» строку при чтении.</span>
       </div>
       <div class="science-card">
         <span class="num">4</span>
-        <b>Не белый фон</b>
-        <span>Тёплый неяркий оттенок вместо чистого белого снижает контрастную усталость при чтении.</span>
+        <b data-i18n="sci4t">Не белый фон</b>
+        <span data-i18n="sci4b">Тёплый неяркий оттенок вместо чистого белого снижает контрастную усталость при чтении.</span>
       </div>
       <div class="science-card">
         <span class="num">5</span>
-        <b>Размер шрифта имеет значение сам по себе</b>
-        <span>Увеличенный кегль ускоряет чтение независимо от гарнитуры.</span>
+        <b data-i18n="sci5t">Размер шрифта имеет значение сам по себе</b>
+        <span data-i18n="sci5b">Увеличенный кегль ускоряет чтение независимо от гарнитуры.</span>
       </div>
     </div>
   </section>
- 
-  <div class="footer-note">
+
+  <div class="footer-note" data-i18n="footerNote">
     Прототип для учебного проекта. Упрощение текста выполняется языковой моделью — итоговый текст стоит перепроверять на смысловую точность перед использованием.
   </div>
- 
+
 </div>
- 
+
 <script>
+  const translations = {
+    ru: {
+      eyebrow: 'ClearRead · прототип',
+      h1: 'Текст, который легче читать.',
+      sub: 'Вставь любой сложный текст — учебник, статью, инструкцию. ClearRead упростит формулировки и переформатирует страницу по правилам, которые реально помогают читателям с дислексией.',
+      sourceLabel: 'Исходный текст',
+      simplifiedLabel: 'Упрощённая версия',
+      listen: 'Слушать',
+      stop: 'Стоп',
+      outputEmpty: 'Здесь появится упрощённый и переформатированный текст.',
+      simplifyBtn: 'Упростить текст',
+      simplifying: 'Упрощаю...',
+      placeholder: 'Вставь текст сюда...',
+      sampleText: 'Согласно последним исследованиям, эффективность специализированных типографических решений, направленных на компенсацию дислексических нарушений чтения, остаётся предметом научной дискуссии среди специалистов в области когнитивной психологии и педагогики.',
+      settingsTitle: 'Настройки чтения',
+      fontSizeLabel: 'Размер шрифта',
+      lineHeightLabel: 'Межстрочный интервал',
+      letterSpacingLabel: 'Межбуквенный интервал',
+      fontFamilyLabel: 'Шрифт текста',
+      fontStandard: 'Обычный',
+      rulerLabel: 'Линейка для чтения',
+      rulerOn: 'Включить',
+      rulerOff: 'Выключить',
+      bgLabel: 'Фон текста',
+      scienceTitle: 'На чём основан дизайн',
+      sci1t: 'Интервалы важнее шрифта',
+      sci1b: 'Специальные «дислексик-шрифты» не показали устойчивого преимущества перед обычным чистым sans-serif — разница в межбуквенном и межстрочном интервале работает надёжнее.',
+      sci2t: 'Длина строки',
+      sci2b: 'Рекомендуемая длина строки — 60–70 символов, текст выровнен по левому краю без выравнивания по ширине.',
+      sci3t: 'Межстрочный интервал 1.5–2×',
+      sci3b: 'Снижает визуальную скученность текста и помогает глазу не «терять» строку при чтении.',
+      sci4t: 'Не белый фон',
+      sci4b: 'Тёплый неяркий оттенок вместо чистого белого снижает контрастную усталость при чтении.',
+      sci5t: 'Размер шрифта имеет значение сам по себе',
+      sci5b: 'Увеличенный кегль ускоряет чтение независимо от гарнитуры.',
+      footerNote: 'Прототип для учебного проекта. Упрощение текста выполняется языковой моделью — итоговый текст стоит перепроверять на смысловую точность перед использованием.',
+      errorText: 'Ошибка при упрощении текста. Попробуй ещё раз.',
+      errorFallback: 'Не получилось упростить текст.',
+      heroWords: ['короче.', 'просторнее.', 'понятнее.'],
+      ttsLang: 'ru-RU'
+    },
+    en: {
+      eyebrow: 'ClearRead · prototype',
+      h1: 'Text that\'s easier to read.',
+      sub: 'Paste any complex text — a textbook, an article, instructions. ClearRead simplifies the wording and reformats the page using rules that actually help readers with dyslexia.',
+      sourceLabel: 'Source text',
+      simplifiedLabel: 'Simplified version',
+      listen: 'Listen',
+      stop: 'Stop',
+      outputEmpty: 'The simplified, reformatted text will appear here.',
+      simplifyBtn: 'Simplify text',
+      simplifying: 'Simplifying...',
+      placeholder: 'Paste your text here...',
+      sampleText: 'According to recent research, the effectiveness of specialized typographic solutions aimed at compensating for dyslexic reading difficulties remains a subject of scientific debate among specialists in cognitive psychology and education.',
+      settingsTitle: 'Reading settings',
+      fontSizeLabel: 'Font size',
+      lineHeightLabel: 'Line height',
+      letterSpacingLabel: 'Letter spacing',
+      fontFamilyLabel: 'Text font',
+      fontStandard: 'Standard',
+      rulerLabel: 'Reading ruler',
+      rulerOn: 'Enable',
+      rulerOff: 'Disable',
+      bgLabel: 'Text background',
+      scienceTitle: 'What the design is based on',
+      sci1t: 'Spacing matters more than font',
+      sci1b: 'Special "dyslexia fonts" haven\'t shown a consistent advantage over a clean regular sans-serif — letter and line spacing make a more reliable difference.',
+      sci2t: 'Line length',
+      sci2b: 'Recommended line length is 60–70 characters, left-aligned with no justification.',
+      sci3t: 'Line height of 1.5–2×',
+      sci3b: 'Reduces visual crowding and helps the eye avoid losing the line while reading.',
+      sci4t: 'Not a white background',
+      sci4b: 'A warm, muted tone instead of pure white reduces contrast fatigue while reading.',
+      sci5t: 'Font size matters on its own',
+      sci5b: 'A larger size speeds up reading regardless of the typeface.',
+      footerNote: 'A prototype built for a school project. Text simplification is done by a language model — double-check the result for accuracy before relying on it.',
+      errorText: 'Error while simplifying the text. Please try again.',
+      errorFallback: 'Could not simplify the text.',
+      heroWords: ['shorter.', 'roomier.', 'clearer.'],
+      ttsLang: 'en-US'
+    }
+  };
+
+  let currentLang = 'ru';
+  const langBtns = document.querySelectorAll('.lang-btn');
+  const heroWordEls = [document.getElementById('heroWord1'), document.getElementById('heroWord2'), document.getElementById('heroWord3')];
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    const t = translations[lang];
+    document.documentElement.lang = lang;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (t[key] !== undefined) el.textContent = t[key];
+    });
+    const ph = document.querySelector('[data-i18n-placeholder]');
+    if (ph) ph.placeholder = t.placeholder;
+
+    // swap the sample text only if the user hasn't typed their own yet
+    if (inputText.dataset.userEdited !== 'true') {
+      inputText.value = t.sampleText;
+    }
+
+    heroWordEls.forEach((el, i) => { if (el) el.textContent = t.heroWords[i]; });
+
+    rulerToggle.textContent = rulerOn ? t.rulerOff : t.rulerOn;
+    listenBtn.querySelector('span').textContent = speechSynthesis.speaking ? t.stop : t.listen;
+    simplifyBtn.textContent = simplifyBtn.disabled ? t.simplifying : t.simplifyBtn;
+
+    langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+    checkLineLength();
+  }
+
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+  });
+
+  document.getElementById('inputText').addEventListener('input', (e) => {
+    e.target.dataset.userEdited = 'true';
+  });
+
   const inputText = document.getElementById('inputText');
   const outputBox = document.getElementById('outputBox');
   const simplifyBtn = document.getElementById('simplifyBtn');
   const errorMsg = document.getElementById('errorMsg');
   const rulerTag = document.getElementById('rulerTag');
- 
+
   const fontSize = document.getElementById('fontSize');
   const lineHeight = document.getElementById('lineHeight');
   const letterSpacing = document.getElementById('letterSpacing');
@@ -374,10 +511,10 @@
   const lineHeightVal = document.getElementById('lineHeightVal');
   const letterSpacingVal = document.getElementById('letterSpacingVal');
   const swatches = document.querySelectorAll('.swatch');
- 
+
   let currentBg = '#FBF8F0';
   let currentFont = "'Atkinson Hyperlegible', Verdana, sans-serif";
- 
+
   const fontBtns = document.querySelectorAll('.font-btn[data-font]');
   fontBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -387,48 +524,49 @@
       applyStyles();
     });
   });
- 
+
   // Reading ruler: highlights the line under the cursor, dims the rest
   const outputWrap = document.getElementById('outputWrap');
   const readingRuler = document.getElementById('readingRuler');
   const rulerToggle = document.getElementById('rulerToggle');
   let rulerOn = false;
- 
+
   rulerToggle.addEventListener('click', () => {
     rulerOn = !rulerOn;
-    rulerToggle.textContent = rulerOn ? 'Выключить' : 'Включить';
+    rulerToggle.textContent = rulerOn ? translations[currentLang].rulerOff : translations[currentLang].rulerOn;
     rulerToggle.classList.toggle('active', rulerOn);
     readingRuler.style.display = rulerOn ? 'block' : 'none';
   });
- 
+
   outputWrap.addEventListener('mousemove', (e) => {
     if (!rulerOn) return;
     const rect = outputWrap.getBoundingClientRect();
     const y = e.clientY - rect.top;
     readingRuler.style.top = Math.max(0, y - 17) + 'px';
   });
- 
+
   // Text-to-speech ("Слушать текст")
   const listenBtn = document.getElementById('listenBtn');
   listenBtn.addEventListener('click', () => {
     if (!('speechSynthesis' in window)) return;
+    const labelSpan = listenBtn.querySelector('span');
     if (speechSynthesis.speaking) {
       speechSynthesis.cancel();
       listenBtn.classList.remove('speaking');
-      listenBtn.textContent = '🔊 Слушать';
+      labelSpan.textContent = translations[currentLang].listen;
       return;
     }
     const text = outputBox.textContent;
     if (!text) return;
     const utter = new SpeechSynthesisUtterance(text);
-    utter.lang = 'ru-RU';
+    utter.lang = translations[currentLang].ttsLang;
     utter.rate = 0.95;
-    utter.onend = () => { listenBtn.classList.remove('speaking'); listenBtn.textContent = '🔊 Слушать'; };
+    utter.onend = () => { listenBtn.classList.remove('speaking'); labelSpan.textContent = translations[currentLang].listen; };
     listenBtn.classList.add('speaking');
-    listenBtn.textContent = '⏸ Стоп';
+    labelSpan.textContent = translations[currentLang].stop;
     speechSynthesis.speak(utter);
   });
- 
+
   function applyStyles() {
     outputBox.style.fontSize = fontSize.value + 'px';
     outputBox.style.lineHeight = lineHeight.value;
@@ -437,29 +575,30 @@
     outputBox.style.fontFamily = currentFont;
     outputBox.style.maxWidth = '65ch';
     outputBox.style.textAlign = 'left';
- 
+
     fontSizeVal.textContent = fontSize.value + 'px';
     lineHeightVal.textContent = lineHeight.value;
     letterSpacingVal.textContent = letterSpacing.value + 'em';
- 
+
     checkLineLength();
   }
- 
+
   function checkLineLength() {
     // approximate characters per line based on box width and font size
     const boxWidth = outputBox.clientWidth || 400;
     const approxCharWidth = parseFloat(fontSize.value) * 0.55;
     const charsPerLine = Math.round(boxWidth / approxCharWidth);
     rulerTag.style.display = 'inline-block';
+    const unit = currentLang === 'ru' ? 'симв/строку' : 'chars/line';
     if (charsPerLine >= 55 && charsPerLine <= 75) {
-      rulerTag.textContent = '~' + charsPerLine + ' симв/строку ✓';
+      rulerTag.textContent = '~' + charsPerLine + ' ' + unit + ' ✓';
       rulerTag.className = 'ruler-tag ruler-ok';
     } else {
-      rulerTag.textContent = '~' + charsPerLine + ' симв/строку — вне 60–70';
+      rulerTag.textContent = '~' + charsPerLine + ' ' + unit + (currentLang === 'ru' ? ' — вне 60–70' : ' — outside 60–70');
       rulerTag.className = 'ruler-tag ruler-warn';
     }
   }
- 
+
   [fontSize, lineHeight, letterSpacing].forEach(el => el.addEventListener('input', applyStyles));
   swatches.forEach(sw => {
     sw.addEventListener('click', () => {
@@ -470,41 +609,42 @@
     });
   });
   window.addEventListener('resize', checkLineLength);
- 
+
   async function simplifyText() {
     const text = inputText.value.trim();
     if (!text) return;
- 
+    const t = translations[currentLang];
+
     simplifyBtn.disabled = true;
-    simplifyBtn.textContent = 'Упрощаю...';
+    simplifyBtn.textContent = t.simplifying;
     errorMsg.style.display = 'none';
     outputBox.classList.remove('empty');
     outputBox.textContent = '...';
- 
+
     try {
       const response = await fetch("/api/simplify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text })
+        body: JSON.stringify({ text, lang: currentLang })
       });
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Ошибка сервера');
+        throw new Error(data.error || 'Server error');
       }
-      outputBox.textContent = data.simplified || 'Не удалось получить ответ.';
+      outputBox.textContent = data.simplified || t.errorFallback;
       applyStyles();
       if (data.simplified) listenBtn.style.display = 'inline-block';
     } catch (err) {
       console.error(err);
-      errorMsg.textContent = 'Ошибка при упрощении текста. Попробуй ещё раз.';
+      errorMsg.textContent = t.errorText;
       errorMsg.style.display = 'block';
-      outputBox.textContent = 'Не получилось упростить текст.';
+      outputBox.textContent = t.errorFallback;
     } finally {
       simplifyBtn.disabled = false;
-      simplifyBtn.textContent = 'Упростить текст';
+      simplifyBtn.textContent = t.simplifyBtn;
     }
   }
- 
+
   simplifyBtn.addEventListener('click', simplifyText);
   applyStyles();
 </script>
